@@ -1,0 +1,2 @@
+pandoc -f html -t markdown_github README.html > README.md
+

@@ -1,6 +1,21 @@
 <h1>route-4-dhcp</h1>
 Calculate Classless Route Option 121, <a href="https://tools.ietf.org/html/rfc3442">RFC 3442</a>, The Classless Static Route Option for Dynamic Host Configuration Protocol (DHCP) version 4
 
+<h2>Classless Route Option Format</h2>
+
+The code for this option is 121, and its minimum length is 5 bytes.<br>
+This option can contain one or more static routes, each of which consists of a destination descriptor and the IP address of the router that should be used to reach that destination.<br>
+
+<pre>  Code Len Destination 1   Router 1
++-----+---+----+-----+----+----+----+----+----+
+| 121 | n | d1 | ... | dN | r1 | r2 | r3 | r4 |
++-----+---+----+-----+----+----+----+----+----+
+
+ Destination 2        Router 2
++----+-----+----+----+----+----+----+
+| d1 | ... | dN | r1 | r2 | r3 | r4 |
++----+-----+----+----+----+----+----+</pre>
+
 <h2>Sample use</h2>
 
 <pre>$ rfc3442.route-4-dhcp.pl 10.0.0.0/8 192.168.88.2 172.16.0.0/12 192.168.88.2 192.168.0.0/16 192.168.88.2 0.0.0.0/0 192.168.88.1
