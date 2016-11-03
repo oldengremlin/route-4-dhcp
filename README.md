@@ -1,7 +1,7 @@
 # route-4-dhcp
 Calculate Classless Route Option 121, RFC 3442, The Classless Static Route Option for Dynamic Host Configuration Protocol (DHCP) version 4
 
-Sample use
+#Sample use
 
 $ rfc3442.route-4-dhcp.pl 10.0.0.0/8 192.168.88.2 172.16.0.0/12 192.168.88.2 192.168.0.0/16 192.168.88.2 0.0.0.0/0 192.168.88.1
 
