@@ -6,6 +6,7 @@ use diagnostics;
 use v5.10.0;
 
 my ($net, $gw, $aggregate) = ("", "", "");
+my $re_ip = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 
 foreach (@ARGV) {
     unless ($net) { $net = $_; next; }
@@ -13,42 +14,47 @@ foreach (@ARGV) {
 	$gw = $_;
 
 	my ($network, $subnetmask) = split("/", $net);
-	my (@destination) = split( /\./, $network );
-	my $destination = "";
 
-	my (@router) = split( /\./, $gw );
-	my $router = "";
+        if (($subnetmask>=0 && $subnetmask<=32) && $network =~ /^$re_ip$/ && $gw =~/^$re_ip$/ ) {
 
-	my $networklen = to_hex($subnetmask);
+            my (@destination) = split( /\./, $network );
+            my $destination = "";
 
-	my $significantoctets = 0;
-	$significantoctets = 1 if $subnetmask>=1 && $subnetmask<=8;
-	$significantoctets = 2 if $subnetmask>=9 && $subnetmask<=16;
-	$significantoctets = 3 if $subnetmask>=17 && $subnetmask<=24;
-	$significantoctets = 4 if $subnetmask>=25 && $subnetmask<=32;
+            my (@router) = split( /\./, $gw );
+            my $router = "";
 
-	if ($significantoctets>0) {
-	    foreach my $index (1..$significantoctets) {
-		$destination .= to_hex($destination[$index-1]);
-	    }
-	} else {
-	    $destination .= "";
-	}
+            my $networklen = to_hex($subnetmask);
 
-	foreach my $r (@router) {
-	    $router .= to_hex($r);
-	}
+            my $significantoctets = 0;
+            $significantoctets = 1 if $subnetmask>=1 && $subnetmask<=8;
+            $significantoctets = 2 if $subnetmask>=9 && $subnetmask<=16;
+            $significantoctets = 3 if $subnetmask>=17 && $subnetmask<=24;
+            $significantoctets = 4 if $subnetmask>=25 && $subnetmask<=32;
 
-	$aggregate .= sprintf("%s%s%s", $networklen, $destination, $router);
+            if ($significantoctets>0) {
+                foreach my $index (1..$significantoctets) {
+                    $destination .= to_hex($destination[$index-1]);
+                }
+            } else {
+                $destination .= "";
+            }
 
-	printf(
-	    "option_121_route_%s_via_%s : 0x%s%s%s\n",
-	    $net, $gw, $networklen, $destination, $router
-	);
-	printf(
-	    "option_249_route_%s_via_%s : 0x%s%s%s\n",
-	    $net, $gw, $networklen, $destination, $router
-	);
+            foreach my $r (@router) {
+                $router .= to_hex($r);
+            }
+
+            $aggregate .= sprintf("%s%s%s", $networklen, $destination, $router);
+
+            printf(
+                "option_121_route_%s_via_%s : 0x%s%s%s\n",
+                $net, $gw, $networklen, $destination, $router
+            );
+            printf(
+                "option_249_route_%s_via_%s : 0x%s%s%s\n",
+                $net, $gw, $networklen, $destination, $router
+            );
+
+        }
 
     }
     $net = "";
