@@ -54,7 +54,9 @@ foreach (@ARGV) {
                 $net, $gw, $networklen, $destination, $router
             );
 
-        }
+        } else {
+            print STDERR sprintf("Mask %d, network %s or gateway %s error\n");
+	}
 
     }
     $net = "";
