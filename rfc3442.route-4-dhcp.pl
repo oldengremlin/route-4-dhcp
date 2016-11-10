@@ -11,9 +11,9 @@ my $re_ip = "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[
 foreach (@ARGV) {
     unless ($net) { $net = $_; next; }
     unless ($gw) {
-	$gw = $_;
+        $gw = $_;
 
-	my ($network, $subnetmask) = split("/", $net);
+        my ($network, $subnetmask) = split("/", $net);
 
         if (($subnetmask>=0 && $subnetmask<=32) && $network =~ /^$re_ip$/ && $gw =~/^$re_ip$/ ) {
 
@@ -56,7 +56,7 @@ foreach (@ARGV) {
 
         } else {
             print STDERR sprintf("Mask %d, network %s or gateway %s error\n");
-	}
+        }
 
     }
     $net = "";
@@ -76,3 +76,4 @@ sub to_hex {
     ($n) = "0$n" =~ m/.*(..)$/;
     return $n;
 }
+
