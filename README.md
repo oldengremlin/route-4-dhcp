@@ -36,3 +36,13 @@ Sample use
 
 See more http://oldengremlin.blogspot.com/2016/10/routeros-dhcp.html
 
+Migrate from github to Ukrcom GitLab 
+====================================
+
+    git remote add as12593-gitlab ssh://git@gitlab.ukrhub.net:2224/olden/route-4-dhcp.git
+    git branch -M main
+    git push -uf as12593-gitlab main
+
+Commit on github
+----------------
+    git push -uf origin main
